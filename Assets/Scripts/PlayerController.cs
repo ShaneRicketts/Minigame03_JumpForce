@@ -5,10 +5,14 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody playerRb;
+
+    //Jump Variables
     public float jumpForce;
     public float gravityModifier;
-
     public bool isOnGround = true;
+
+    //Game State Variables
+    public bool gameOver = false;
 
     void Start()
     {
@@ -17,6 +21,11 @@ public class PlayerController : MonoBehaviour
     }
 
     void Update()
+    {
+        HandleJump();
+    }
+
+    void HandleJump()
     {
         if (Input.GetKeyDown(KeyCode.Space) && isOnGround)
         {
@@ -27,7 +36,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        isOnGround = true;
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isOnGround = true;
+        }
+        else if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            gameOver = true;
+            Debug.Log("Game Over!");
+        }
     }
-
 }
